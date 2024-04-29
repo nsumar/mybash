@@ -1,10 +1,6 @@
 #!/bin/bash
 iatest=$(expr index "$-" i)
 
-#######################################################
-# SOURCED ALIAS'S AND SCRIPTS BY zachbrowne.me
-#######################################################
-
 # Source global definitions
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
@@ -46,26 +42,15 @@ PROMPT_COMMAND='history -a'
 if [[ $iatest -gt 0 ]]; then bind "set completion-ignore-case on"; fi
 
 # Show auto-completion list automatically, without double tab
-if [[ $iatest -gt 0 ]]; then bind "set show-all-if-ambiguous On"; fi
+#if [[ $iatest -gt 0 ]]; then bind "set show-all-if-ambiguous On"; fi
 
 # Set the default editor
 export EDITOR=nano
 export VISUAL=nano
 
-# Replace batcat with cat on Fedora as batcat is not available as a RPM in any form
-if command -v lsb_release >/dev/null; then
-	DISTRIBUTION=$(lsb_release -si)
-
-	if [ "$DISTRIBUTION" = "Fedora" ]; then
-		alias cat='bat'
-	else
-		alias cat='batcat'
-	fi
-fi
-
 # To have colors for ls and all grep commands such as grep, egrep and zgrep
 export CLICOLOR=1
-export LS_COLORS='no=00:fi=00:di=00;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:*.xml=00;31:'
+export LS_COLORS='no=00:fi=00:di=00;92:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.ogg=01;35:*.mp3=01;35:*.wav=01;35:*.xml=00;31:'
 #export GREP_OPTIONS='--color=auto' #deprecated
 alias grep="/usr/bin/grep $GREP_OPTIONS"
 unset GREP_OPTIONS
@@ -78,21 +63,6 @@ export LESS_TERMCAP_se=$'\E[0m'
 export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
-
-#######################################################
-# MACHINE SPECIFIC ALIAS'S
-#######################################################
-
-# Alias's for SSH
-# alias SERVERNAME='ssh YOURWEBSITE.com -l USERNAME -p PORTNUMBERHERE'
-
-# Alias's to change the directory
-alias web='cd /var/www/html'
-
-# Alias's to mount ISO files
-# mount -o loop /home/NAMEOFISO.iso /home/ISOMOUNTDIR/
-# umount /home/NAMEOFISO.iso
-# (Both commands done as root only.)
 
 #######################################################
 # GENERAL ALIAS'S
@@ -125,9 +95,6 @@ alias cls='clear'
 alias apt-get='sudo apt-get'
 alias multitail='multitail --no-repeat -c'
 alias freshclam='sudo freshclam'
-alias vi='nvim'
-alias svi='sudo vi'
-alias vis='nvim "+set si"'
 
 # Change directory aliases
 alias home='cd ~'
@@ -208,15 +175,6 @@ alias ungz='tar -xvzf'
 
 # Show all logs in /var/log
 alias logs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f"
-
-# SHA1
-alias sha1='openssl sha1'
-
-alias clickpaste='sleep 3; xdotool type "$(xclip -o -selection clipboard)"'
-
-# KITTY - alias to be able to use kitty features when connecting to remote servers(e.g use tmux on remote server)
-
-alias kssh="kitty +kitten ssh"
 
 # Extracts any archive(s) (if unp isn't installed)
 extract() {
@@ -427,21 +385,9 @@ install_bashrc_support() {
 	fi
 }
 
-# Show current network information
-netinfo() {
-	echo "--------------- Network Information ---------------"
-	/sbin/ifconfig | awk /'inet addr/ {print $2}'
-	echo ""
-	/sbin/ifconfig | awk /'Bcast/ {print $3}'
-	echo ""
-	/sbin/ifconfig | awk /'inet addr/ {print $4}'
-
-	/sbin/ifconfig | awk /'HWaddr/ {print $4,$5}'
-	echo "---------------------------------------------------"
-}
 
 # IP address lookup
-alias whatismyip="whatsmyip"
+alias whatip="whatsmyip"
 function whatsmyip() {
 	# Dumps a list of all IP addresses for every device
 	# /sbin/ifconfig |grep -B1 "inet addr" |awk '{ if ( $1 == "inet" ) { print $2 } else if ( $2 == "Link" ) { printf "%s:" ,$1 } }' |awk -F: '{ print $1 ": " $3 }';
@@ -456,10 +402,10 @@ function whatsmyip() {
 	# Internal IP Lookup.
 	if [ -e /sbin/ip ]; then
 		echo -n "Internal IP: "
-		/sbin/ip addr show wlan0 | grep "inet " | awk -F: '{print $1}' | awk '{print $2}'
+		/sbin/ip addr show wlp0s20f3 | grep "inet " | awk -F: '{print $1}' | awk '{print $2}'
 	else
 		echo -n "Internal IP: "
-		/sbin/ifconfig wlan0 | grep "inet " | awk -F: '{print $1} |' | awk '{print $2}'
+		/sbin/ifconfig wlp0s20f3 | grep "inet " | awk -F: '{print $1} |' | awk '{print $2}'
 	fi
 
 	# External IP Lookup
